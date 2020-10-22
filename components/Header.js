@@ -1,21 +1,34 @@
 import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import authContext from './../context/auth/authContext';
+import appContext from './../context/app/appContext';
+import { useRouter } from 'next/router';
 
 const Header = () => {
+    // routing
+    const router = useRouter();
+
     // Extraer el usuario autenticado del Storage
     const { usuario, usuarioAutenticado, cerrarSesion } = useContext(authContext);
+
+    // Context de la aplicacion
+    const { limpiarState } = useContext(appContext);
 
     useEffect(() => {
         // Revisar existencia de un token para enviar peticion a API
         usuarioAutenticado();
-    }, [])
+    }, []);
+
+    const redireccionar = () => {
+        router.push('/');
+        limpiarState();
+    };
     
     return (
         <header className="py-8 flex flex-col md:flex-row items-center justify-between">
-            <Link href="/">
-                <img className='w-64 mb-8 md:mb-0' src="logo.svg"/>
-            </Link>
+                <img onClick={redireccionar}
+                     className='w-64 mb-8 md:mb-0 cursor-pointer' src="/logo.svg"
+                />
                 {usuario ? 
                 (   
                     <div className="flex items-center">
